@@ -1,0 +1,8 @@
+C:\Users\User\OneDrive\Desktop\UBB\Semester 5\VR\Ray Tracer\Ray Tracer\bin\Release\Ray Tracer.exe.config
+C:\Users\User\OneDrive\Desktop\UBB\Semester 5\VR\Ray Tracer\Ray Tracer\bin\Release\Ray Tracer.exe
+C:\Users\User\OneDrive\Desktop\UBB\Semester 5\VR\Ray Tracer\Ray Tracer\bin\Release\Ray Tracer.pdb
+C:\Users\User\OneDrive\Desktop\UBB\Semester 5\VR\Ray Tracer\Ray Tracer\obj\Release\Ray Tracer.csproj.AssemblyReference.cache
+C:\Users\User\OneDrive\Desktop\UBB\Semester 5\VR\Ray Tracer\Ray Tracer\obj\Release\Ray Tracer.csproj.SuggestedBindingRedirects.cache
+C:\Users\User\OneDrive\Desktop\UBB\Semester 5\VR\Ray Tracer\Ray Tracer\obj\Release\Ray Tracer.csproj.CoreCompileInputs.cache
+C:\Users\User\OneDrive\Desktop\UBB\Semester 5\VR\Ray Tracer\Ray Tracer\obj\Release\Ray Tracer.exe
+C:\Users\User\OneDrive\Desktop\UBB\Semester 5\VR\Ray Tracer\Ray Tracer\obj\Release\Ray Tracer.pdb
