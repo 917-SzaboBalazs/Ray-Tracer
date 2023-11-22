@@ -60,7 +60,7 @@ namespace rt
             var up = new Vector(0, -1, 0).Normalize();
             var first = new Vector(0, 0, 1).Normalize();
             const double dist = 95.0;
-            const int n = 90;
+            const int n = 80;
             const double step = 360.0 / n;
             
             var tasks = new Task[n];

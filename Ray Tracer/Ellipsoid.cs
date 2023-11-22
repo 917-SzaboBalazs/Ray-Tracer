@@ -5,9 +5,9 @@ namespace rt
 {
     public class Ellipsoid : Geometry
     {
-        private Vector Center { get; }
+        protected Vector Center { get; }
         private Vector SemiAxesLength { get; }
-        private double Radius { get; }
+        protected double Radius { get; }
         
         
         public Ellipsoid(Vector center, Vector semiAxesLength, double radius, Material material, Color color) : base(material, color)
@@ -26,9 +26,17 @@ namespace rt
 
         public override Intersection GetIntersection(Line line, double minDist, double maxDist)
         {
-            Vector o_c = line.X0 - Center;
+            Vector A = SemiAxesLength;
+            double R = Radius;
+            Vector Dx = line.Dx;
+            Vector x0 = line.X0;
+            Vector C = Center;
 
-            double delta = (line.Dx * o_c) * (line.Dx * o_c) - (o_c * o_c - Radius * Radius);
+            double a = divideVector(Dx, A).Length2();
+            double b = 2 * (divideVector(Dx, A) * divideVector(x0 - C, A));
+            double c = divideVector(x0 - C, A).Length2() - R * R;
+
+            double delta = b * b - 4 * a * c;
 
             if (delta < 0)
             {
@@ -37,37 +45,48 @@ namespace rt
 
             if (delta == 0)
             {
-                double d = -(line.Dx * o_c);
-                Vector pos = line.X0 + line.Dx * d;
-                Vector norm = (pos - Center).Normalize();
-                bool visible = minDist <= d && d <= maxDist;
+                double t = -b / (2 * a);
+                Vector pos = line.CoordinateToPosition(t);
+                Vector norm = new Vector(2 * (pos.X - C.X) / (A.X * A.X), 2 * (pos.Y - C.Y) / (A.Y * A.Y), 2 * (pos.Z - C.Z) / (A.Z * A.Z))
+                    .Normalize();
 
-                return new Intersection(true, visible, this, line, d, norm);
+                bool visible = minDist <= t && t <= maxDist;
+
+                return new Intersection(true, visible, this, line, t, norm);
             }
 
-            double d1 = -(line.Dx * o_c) - Math.Sqrt(delta);
-            double d2 = -(line.Dx * o_c) + Math.Sqrt(delta);
+            double t1 = (-b - Math.Sqrt(delta)) / (2 * a);
+            double t2 = (-b + Math.Sqrt(delta)) / (2 * a);
 
-            bool d1In = minDist <= d1 && d1 <= maxDist;
-            bool d2In = minDist <= d2 && d2 <= maxDist;
+            bool t1In = minDist <= t1 && t1 <= maxDist;
+            bool t2In = minDist <= t2 && t2 <= maxDist;
 
-            if (!d1In && !d2In)
+            if (!t1In && !t2In)
             {
                 return new Intersection();
             }
 
-            if (d2In && !d1In)
+            if (t2In && !t1In)
             {
-                Vector pos = line.X0 + line.Dx * d2;
-                Vector norm = (pos - Center).Normalize();
+                Vector pos = line.CoordinateToPosition(t2);
+                Vector norm = new Vector(2 * (pos.X - C.X) / (A.X * A.X), 2 * (pos.Y - C.Y) / (A.Y * A.Y), 2 * (pos.Z - C.Z) / (A.Z * A.Z))
+                    .Normalize();
 
-                return new Intersection(true, true, this, line, d2, norm);
+                return new Intersection(true, true, this, line, t2, norm);
             }
 
-            Vector pos_d = line.X0 + line.Dx * d1;
-            Vector norm_d = (pos_d - Center).Normalize();
+            Vector pos_d = line.CoordinateToPosition(t1);
+            Vector norm_d = new Vector(2 * (pos_d.X - C.X) / (A.X * A.X), 2 * (pos_d.Y - C.Y) / (A.Y * A.Y), 2 * (pos_d.Z - C.Z) / (A.Z * A.Z))
+                .Normalize();
 
-            return new Intersection(true, true, this, line, d1, norm_d);
+            return new Intersection(true, true, this, line, t1, norm_d);
         }
+
+        private Vector divideVector(Vector v1, Vector v2)
+        {
+            return new Vector(v1.X / v2.X, v1.Y / v2.Y, v1.Z / v2.Z);
+        }
+
+
     }
 }

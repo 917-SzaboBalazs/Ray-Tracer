@@ -44,10 +44,14 @@ namespace rt
 
         private bool IsLit(Vector point, Light light)
         {
-            Line line = new Line(light.Position, point);
-            Vector firstIntersection = FindFirstIntersection(line, 0, (point - light.Position).Length() + 10).Position;
 
-            return firstIntersection == point;
+            Line line = new Line(light.Position, point);
+            Vector firstIntersection = FindFirstIntersection(line, 0, (point - light.Position).Length() + 1000).Position;
+
+
+            return Math.Abs(firstIntersection.X - point.X) < 0.001 &&
+                Math.Abs(firstIntersection.Y - point.Y) < 0.001 &&
+                Math.Abs(firstIntersection.Z - point.Z) < 0.001;
         }
 
         public void Render(Camera camera, int width, int height, string filename)
@@ -71,7 +75,7 @@ namespace rt
 
                     Intersection intersection = FindFirstIntersection(line, camera.FrontPlaneDistance, camera.BackPlaneDistance);
 
-                    if (intersection.Visible)
+                    if (intersection.Valid && intersection.Visible)
                     {
                         // LAB 1
                         /*Color color = intersection.Geometry.Color;*/
